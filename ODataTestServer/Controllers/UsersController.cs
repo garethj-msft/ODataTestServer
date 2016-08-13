@@ -11,22 +11,22 @@ using System.Web.OData.Routing;
 namespace ODataTestServer.Controllers
 {
     [EnableQuery]
-    public class GroupsController : ODataController
+    public class UsersController : ODataController
     {
        
 
-        // GET api/groups
+        // GET api/users
         public IHttpActionResult Get()
         {
-            return Ok(Model.Groups);
+            return Ok(Model.Users);
         }
 
-        // GET api/groups/<guid>
-        [ODataRoute("groups({id})")]
-        public IHttpActionResult GetGroup([FromODataUri]string id)
+        // GET api/users/<guid>
+        [ODataRoute("users({id})")]
+        public IHttpActionResult GetUser([FromODataUri]string id)
         {
 
-            Group found = Model.Groups.Where(g => g.Id == id).SingleOrDefault();
+            User found = Model.Users.Where(u => u.Id == id).SingleOrDefault();
             if (found != null)
             {
                 return Ok(found);

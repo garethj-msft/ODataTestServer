@@ -8,8 +8,7 @@ namespace ODataTestServer.Models
 {
     public class Group
     {
-
-        public IEnumerable<User> Members { get; }
+        public List<User> Members { get; } = new List<User>();
 
         [Key]
         public string Id { get; set; }
