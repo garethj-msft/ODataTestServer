@@ -10,17 +10,19 @@ namespace ODataTestServer.Models
         internal static User user1, user2, user3;
         internal static Group group1, group2, group3;
 
+        internal static User CallerIdentity { get; private set; }
+
         private static List<Group> groups;
         private static List<User> users;
 
         static Model()
         {
-            user1 = new User { Id = "febfef90-9b5b-4aff-93f0-f8d476964d66" };  // Easily referenceable fixed guid for one of them.
-            user2 = new User();
-            user3 = new User();
-            group1 = new Group { Id = "aebfef90-9b5b-4aff-93f0-f8d476964d66" }; // Easily referenceable fixed guid for one of them.
-            group2 = new Group();
-            group3 = new Group();
+            user1 = new User { Id = "febfef90-9b5b-4aff-93f0-f8d476964d66", FirstName = "Bob", LastName = "Buzzard" };  // Easily referenceable fixed guid for one of them.
+            user2 = new User { FirstName = "Stephen", LastName = "Daker" };
+            user3 = new User { FirstName = "Rose", LastName = "Marie" };
+            group1 = new Group { Id = "aebfef90-9b5b-4aff-93f0-f8d476964d66", DisplayName = "Medical Staff" }; // Easily referenceable fixed guid for one of them.
+            group2 = new Group { DisplayName = "Faculty" };
+            group3 = new Group { DisplayName = "Student Advisors" };
 
             user1.MemberOf.AddRange(new[] { group1, group2 });
             user2.MemberOf.AddRange(new[] { group2, group3 });
@@ -32,9 +34,27 @@ namespace ODataTestServer.Models
 
             groups = new List<Group> { group1, group2, group3 };
             users = new List<User> { user1, user2, user3 };
+
+            // Simulate Auth'd API call 
+            CallerIdentity = user1;
         }
 
         internal static List<Group> Groups { get { return groups; } }
         internal static List<User> Users { get { return users; } }
+
+
+    }
+
+    internal class GroupViewpoint
+    {
+        public Group Group { get; }
+        public User User { get; }
+        public bool IsFavorite { get; set; }
+
+        public GroupViewpoint(Group group, User user)
+        {
+            Group = group;
+            User = user;
+        }
     }
 }
