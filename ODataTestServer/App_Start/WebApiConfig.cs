@@ -24,18 +24,9 @@ namespace ODataTestServer
             config.EnableEnumPrefixFree(true);
             config.EnableUnqualifiedNameCall(true);
             config.EnableCaseInsensitive(true);
-            config.MapODataServiceRoute("api", "api", GetModel());
+            config.MapODataServiceRoute("api", "api", EdmModel.GetModel());
 
         
-        }
-
-        private static IEdmModel GetModel()
-        {
-            var builder = new ODataConventionModelBuilder();
-            builder.EnableLowerCamelCase(); // into camel case json format.
-            builder.EntitySet<Group>("groups");
-            builder.EntitySet<User>("users");
-            return builder.GetEdmModel();
         }
     }
 }

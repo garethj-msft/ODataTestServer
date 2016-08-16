@@ -10,6 +10,8 @@ namespace ODataTestServer.Models
     {
         public List<User> Members { get; } = new List<User>();
 
+        public List<GroupViewpoint> Viewpoints { get; } = new List<GroupViewpoint>();  // In reality would be stored with the User due to sharding.
+
         [Key]
         public string Id { get; set; }
 

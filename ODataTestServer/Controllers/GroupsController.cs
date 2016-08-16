@@ -37,6 +37,30 @@ namespace ODataTestServer.Controllers
             }
         }
 
+        // GET api/groups/<guid>/viewpoints
+        [ODataRoute("groups({id})/viewpoints")]
+        public IHttpActionResult GetGroupViewpoints([FromODataUri]string id, string appOnly=null)
+        {
+            User callerIdentity = appOnly == null ? Model.CallerIdentity : null;
+
+            Group found = Model.Groups.Where(g => g.Id == id).SingleOrDefault();
+            if (found != null)
+            {
+                if (callerIdentity != null)
+                {
+                    return Ok(found.Viewpoints.Where(v => v.User == Model.CallerIdentity));
+                }
+                else
+                {
+                    return Ok(found.Viewpoints);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
         // POST api/values
         public void Post([FromBody]string value)
         {
