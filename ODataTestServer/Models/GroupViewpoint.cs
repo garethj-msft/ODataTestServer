@@ -14,6 +14,8 @@ namespace ODataTestServer.Models
         public Group Group { get; set; }
         public User User { get; set; }
         public bool IsFavorite { get; set; }
+        public int UnseenCount { get; set; }
+        public bool IsSubscribedByMail { get; set; }
 
         public GroupViewpoint(Group group, User user)
         {
