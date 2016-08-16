@@ -39,16 +39,34 @@ namespace ODataTestServer.Models
             group1.Members.AddRange(new[] { user1, user3 });
             group2.Members.AddRange(new[] { user1, user2 });
             group3.Members.AddRange(new[] { user2, user3 });
-            group1.Viewpoints.AddRange(new[] { viewpoint1_1, viewpoint1_3 });
-            group2.Viewpoints.AddRange(new[] { viewpoint2_1, viewpoint2_2 });
-            group3.Viewpoints.AddRange(new[] { viewpoint3_2, viewpoint3_3 });
+            group1.viewpoints.AddRange(new[] { viewpoint1_1, viewpoint1_3 });
+            group2.viewpoints.AddRange(new[] { viewpoint2_1, viewpoint2_2 });
+            group3.viewpoints.AddRange(new[] { viewpoint3_2, viewpoint3_3 });
 
             groups = new List<Group> { group1, group2, group3 };
             users = new List<User> { user1, user2, user3 };
             groupViewpoints = new List<GroupViewpoint> { viewpoint1_1, viewpoint1_3, viewpoint2_1, viewpoint2_2, viewpoint3_2, viewpoint3_3 };
 
-            // Simulate Auth'd API call 
-            CallerIdentity = user1;
+           
+        }
+
+        /// <summary>
+        /// Set up the pseudo-caller identify field based on the value of the appOnly flag.
+        /// appOnly=true => no user - simulated appOnly mode.
+        /// appOnly missing => user1 is the caller - simulated delegate mode
+        /// This is absolutely a fake hack - it won't stand multithreaded use even for a demo.
+        /// </summary>
+        /// <param name="appOnly"></param>
+        internal static void SetupCallerIdentity(string appOnly)
+        {
+            if (string.IsNullOrWhiteSpace(appOnly)) // Simulate Auth'd API call
+            {
+                CallerIdentity = user1;
+            }
+            else // appOnly
+            {
+                CallerIdentity = null;
+            }
         }
 
         internal static List<Group> Groups { get { return groups; } }

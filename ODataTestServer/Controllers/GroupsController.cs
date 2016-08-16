@@ -18,15 +18,17 @@ namespace ODataTestServer.Controllers
     public class GroupsController : ODataController
     {
         // GET api/groups
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(string appOnly = null)
         {
+            Model.SetupCallerIdentity(appOnly);
             return Ok(Model.Groups.AsQueryable());
         }
 
         // GET api/groups/<guid>
         [ODataRoute("groups({id})")]
-        public IHttpActionResult GetGroup([FromODataUri]string id)
+        public IHttpActionResult GetGroup([FromODataUri]string id, string appOnly = null)
         {
+            Model.SetupCallerIdentity(appOnly);
             return OkOrNotFound(Model.Groups.Where(g => g.Id == id).SingleOrDefault());
         }
 
@@ -34,21 +36,16 @@ namespace ODataTestServer.Controllers
         [ODataRoute("groups({id})/viewpoints/$ref")]
         public IHttpActionResult GetGroupViewpointsByRef([FromODataUri]string id, string appOnly = null)
         {
-            User callerIdentity = appOnly == null ? Model.CallerIdentity : null;
+            Model.SetupCallerIdentity(appOnly);
 
             Group found = Model.Groups.Where(g => g.Id == id).SingleOrDefault();
             if (found != null)
             {
-                IEnumerable<GroupViewpoint> viewpoints = found.Viewpoints;
-                if (callerIdentity != null)
-                {
-                    viewpoints = found.Viewpoints.Where(v => v.User == Model.CallerIdentity);
-                }
                 var urlHelper = Request.GetUrlHelper() ?? new UrlHelper(Request);
                 var segments = new List<ODataPathSegment>(Request.ODataProperties().Path.Segments);
                 var uris = new List<Uri>();
                 // Delete the $ref segment and replace it with each viewpoint's ID.
-                foreach (GroupViewpoint viewpoint in viewpoints)
+                foreach (GroupViewpoint viewpoint in found.Viewpoints)
                 {
                     segments.RemoveAt(segments.Count - 1);
                     segments.Add(new KeyValuePathSegment($"'{viewpoint.Id}'"));
@@ -72,19 +69,12 @@ namespace ODataTestServer.Controllers
         [ODataRoute("groups({id})/viewpoints")]
         public IHttpActionResult GetGroupViewpoints([FromODataUri]string id, string appOnly=null)
         {
-            User callerIdentity = appOnly == null ? Model.CallerIdentity : null;
+            Model.SetupCallerIdentity(appOnly);
 
             Group found = Model.Groups.Where(g => g.Id == id).SingleOrDefault();
             if (found != null)
             {
-                if (callerIdentity != null)
-                {
-                    return Ok(found.Viewpoints.Where(v => v.User == callerIdentity));
-                }
-                else
-                {
-                    return Ok(found.Viewpoints);
-                }
+                return Ok(found.Viewpoints);
             }
             else
             {
@@ -96,19 +86,12 @@ namespace ODataTestServer.Controllers
         [ODataRoute("groups({id})/viewpoints({vpid})")]
         public IHttpActionResult GetGroupViewpoint([FromODataUri]string id, [FromODataUri]string vpid, string appOnly = null)
         {
-            User callerIdentity = appOnly == null ? Model.CallerIdentity : null;
+            Model.SetupCallerIdentity(appOnly);
 
             Group found = Model.Groups.Where(g => g.Id == id).SingleOrDefault();
             if (found != null)
             {
-                if (callerIdentity != null)
-                {
-                    return OkOrNotFound(found.Viewpoints.Where(v => v.User == callerIdentity && v.User.Id == vpid).SingleOrDefault());
-                }
-                else
-                {
-                    return OkOrNotFound(found.Viewpoints.Where(v => v.User.Id == vpid).SingleOrDefault());
-                }
+                return OkOrNotFound(found.Viewpoints.Where(v => v.User.Id == vpid).SingleOrDefault());
             }
             else
             {
@@ -130,38 +113,6 @@ namespace ODataTestServer.Controllers
         // DELETE api/values/5
         public void Delete(int id)
         {
-        }
-
-        /// <summary>
-        /// Helper method to get the key value from a uri.
-        /// Usually used by $ref action to extract the key value from the url in body.
-        /// </summary>
-        /// <typeparam name="TKey">The type of the key</typeparam>
-        /// <param name="request">The request instance in current context</param>
-        /// <param name="uri">OData uri that contains the key value</param>
-        /// <returns>The key value</returns>
-        public static TKey GetKeyValue<TKey>(HttpRequestMessage request, Uri uri)
-        {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
-
-            //get the odata path Ex: ~/prefix/entityset/key/navigation/$ref
-            var odataRoute = request.GetRouteData().Route as ODataRoute;
-
-            var odataLocalPath = string.IsNullOrEmpty(odataRoute.RoutePrefix) ? uri.LocalPath
-                : uri.LocalPath.Substring(uri.LocalPath.IndexOf(odataRoute.RoutePrefix, StringComparison.InvariantCulture) + odataRoute.RoutePrefix.Length);
-
-            var odataPath = request.ODataProperties().PathHandler.Parse(request.ODataProperties().Model, "root", odataLocalPath);
-            var keySegment = odataPath.Segments.OfType<KeyValuePathSegment>().FirstOrDefault();
-            if (keySegment == null)
-            {
-                throw new InvalidOperationException("The link does not contain a key.");
-            }
-
-            var value = ODataUriUtils.ConvertFromUriLiteral(keySegment.Value, ODataVersion.V4);
-            return (TKey)value;
         }
 
         public IHttpActionResult OkOrNotFound<T>(T theObject)

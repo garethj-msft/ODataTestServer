@@ -1,5 +1,6 @@
 ﻿using Microsoft.OData.Edm;
 using ODataTestServer.Models;
+using System.Collections.Generic;
 using System.Web.OData.Builder;
 
 namespace ODataTestServer
@@ -17,5 +18,6 @@ namespace ODataTestServer
             groups.EntityType.ContainsMany<GroupViewpoint>(g => g.Viewpoints);
             return builder.GetEdmModel();
         }
+
     }
 }
