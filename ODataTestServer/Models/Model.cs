@@ -19,18 +19,19 @@ namespace ODataTestServer.Models
 
         static Model()
         {
+            Random random = new Random();
             user1 = new User { Id = "febfef90-9b5b-4aff-93f0-f8d476964d66", FirstName = "Bob", LastName = "Buzzard" };  // Easily referenceable fixed guid for one of them.
             user2 = new User { FirstName = "Stephen", LastName = "Daker" };
             user3 = new User { FirstName = "Rose", LastName = "Marie" };
             group1 = new Group { Id = "aebfef90-9b5b-4aff-93f0-f8d476964d66", DisplayName = "Medical Staff" }; // Easily referenceable fixed guid for one of them.
             group2 = new Group { DisplayName = "Faculty" };
             group3 = new Group { DisplayName = "Student Advisors" };
-            viewpoint1_1 = new GroupViewpoint(group1, user1) { IsFavorite = true };
-            viewpoint1_3 = new GroupViewpoint(group1, user3) { IsFavorite = false };
-            viewpoint2_1 = new GroupViewpoint(group2, user1) { IsFavorite = false };
-            viewpoint2_2 = new GroupViewpoint(group2, user2) { IsFavorite = true };
-            viewpoint3_2 = new GroupViewpoint(group3, user2) { IsFavorite = true };
-            viewpoint3_3 = new GroupViewpoint(group3, user3) { IsFavorite = false };
+            viewpoint1_1 = new GroupViewpoint(group1, user1) { IsFavorite = true, UnseenCount =  random.Next(11), IsSubscribedByMail = false };
+            viewpoint1_3 = new GroupViewpoint(group1, user3) { IsFavorite = false, UnseenCount = random.Next(11), IsSubscribedByMail = true };
+            viewpoint2_1 = new GroupViewpoint(group2, user1) { IsFavorite = false, UnseenCount = random.Next(11), IsSubscribedByMail = false };
+            viewpoint2_2 = new GroupViewpoint(group2, user2) { IsFavorite = true, UnseenCount = random.Next(11), IsSubscribedByMail = true };
+            viewpoint3_2 = new GroupViewpoint(group3, user2) { IsFavorite = true, UnseenCount = random.Next(11), IsSubscribedByMail = false };
+            viewpoint3_3 = new GroupViewpoint(group3, user3) { IsFavorite = false, UnseenCount = random.Next(11), IsSubscribedByMail = true };
 
             user1.MemberOf.AddRange(new[] { group1, group2 });
             user2.MemberOf.AddRange(new[] { group2, group3 });
