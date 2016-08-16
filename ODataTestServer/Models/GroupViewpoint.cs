@@ -10,7 +10,7 @@ namespace ODataTestServer.Models
     public abstract class GroupViewpointBase
     {
         public bool IsFavorite { get; set; }
-        public int UnseenCount { get; set; } 
+        public int UnseenCount { get; set; }
         public bool IsSubscribedByMail { get; set; }
     }
 
@@ -31,19 +31,6 @@ namespace ODataTestServer.Models
             User = user;
             Id = user.Id;
         }
-
-        internal GroupViewpointFacade AsFacade()
-        {
-            return new GroupViewpointFacade { IsFavorite = this.IsFavorite, UnseenCount = this.UnseenCount, IsSubscribedByMail = this.IsSubscribedByMail };
-        }
-    }
-
-    /// <summary>
-    /// Facade version of Group Viewpoint
-    /// </summary>
-    [ComplexType]
-    public class GroupViewpointFacade : GroupViewpointBase
-    {
 
     }
 }

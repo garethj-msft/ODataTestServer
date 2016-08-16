@@ -35,14 +35,33 @@ namespace ODataTestServer.Models
             this.Id = Guid.NewGuid().ToString();
         }
 
-        /// <summary>
-        /// Facade of the viewpoint for delegate scenarios - null in appOnly scenarios
-        /// </summary>
-        public GroupViewpointFacade Viewpoint
+        public bool? ViewpointIsFavorite
         {
             get
             {
-                return Model.CallerIdentity == null ? null : Viewpoints.SingleOrDefault()?.AsFacade();
+                return Model.CallerIdentity == null ? null : Viewpoints.SingleOrDefault()?.IsFavorite;
+            }
+            set
+            {
+            }
+        }
+
+        public int? ViewpointUnseenCount
+        {
+            get
+            {
+                return Model.CallerIdentity == null ? null : Viewpoints.SingleOrDefault()?.UnseenCount;
+            }
+            set
+            {
+            }
+        }
+
+        public bool? ViewpointIsSubscribedByMail
+        {
+            get
+            {
+                return Model.CallerIdentity == null ? null : Viewpoints.SingleOrDefault()?.IsSubscribedByMail;
             }
             set
             {
