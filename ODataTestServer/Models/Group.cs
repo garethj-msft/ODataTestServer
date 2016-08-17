@@ -20,9 +20,26 @@ namespace ODataTestServer.Models
         {
             get
             {
-                // @@@ TODO: This is highly problematic, because we've got service code (auth) in our POCOs.
-                return viewpoints.Where(vp => Model.CallerIdentity == null ? true : vp.User.Id == Model.CallerIdentity.Id);
+                return GetViewpointsImpl();
             }
+        }
+
+        /// <summary>
+        /// Internal version of Viewpoints to make debugging easier to separate external calls from internal ones.
+        /// </summary>
+        public IEnumerable<GroupViewpoint> InternalViewpoints
+        {
+            get
+            {
+                return GetViewpointsImpl();
+            }
+        }
+
+        private IEnumerable<GroupViewpoint> GetViewpointsImpl()
+        {
+            // @@@ TODO: This and other code with similar CallerIdentity-centric tests is highly problematic, because we've got service code (auth) in our POCOs.
+            // Inject the tests with some kind of hook, as it doesn't appear we can hook OData itself.
+            return viewpoints.Where(vp => Model.CallerIdentity == null ? true : vp.User.Id == Model.CallerIdentity.Id);
         }
 
         [Key]
@@ -42,7 +59,7 @@ namespace ODataTestServer.Models
         {
             get
             {
-                return Model.CallerIdentity == null ? null : Viewpoints.SingleOrDefault()?.AsFacade();
+                return Model.CallerIdentity == null ? null : InternalViewpoints.SingleOrDefault()?.AsFacade();
             }
             set
             {
