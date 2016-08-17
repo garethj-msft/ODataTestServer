@@ -82,7 +82,24 @@ namespace ODataTestServer.Controllers
             }
         }
 
-        // GET api/groups/<guid>/viewpoints
+        // GET api/groups/<guid>/members
+        [ODataRoute("groups({id})/members")]
+        public IHttpActionResult GetGroupMembers([FromODataUri]string id, string appOnly = null)
+        {
+            Model.SetupCallerIdentity(appOnly);
+
+            Group found = Model.Groups.Where(g => g.Id == id).SingleOrDefault();
+            if (found != null)
+            {
+                return Ok(found.Members);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // GET api/groups/<guid>/viewpoints/<guid>
         [ODataRoute("groups({id})/viewpoints({vpid})")]
         public IHttpActionResult GetGroupViewpoint([FromODataUri]string id, [FromODataUri]string vpid, string appOnly = null)
         {

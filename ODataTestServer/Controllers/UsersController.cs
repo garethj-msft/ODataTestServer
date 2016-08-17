@@ -37,6 +37,23 @@ namespace ODataTestServer.Controllers
             }
         }
 
+        // GET api/users/<guid>/memberOf
+        [ODataRoute("users({id})/memberOf")]
+        public IHttpActionResult GetUserMemberOf([FromODataUri]string id, string appOnly = null)
+        {
+            Model.SetupCallerIdentity(appOnly);
+
+            User found = Model.Users.Where(u => u.Id == id).SingleOrDefault();
+            if (found != null)
+            {
+                return Ok(found.MemberOf);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
         // POST api/values
         public void Post([FromBody]string value)
         {
