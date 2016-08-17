@@ -16,7 +16,7 @@ namespace ODataTestServer
             var groups = builder.EntitySet<Group>("groups");
             builder.EntitySet<User>("users");
             groups.EntityType.ContainsMany<GroupViewpoint>(g => g.Viewpoints);
-            groups.EntityType.Function("viewpoint").Returns<GroupViewpointFacade>();
+            groups.EntityType.Function("viewpoint").Returns<GroupViewpoint>();
             return builder.GetEdmModel();
         }
 
