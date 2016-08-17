@@ -82,6 +82,24 @@ namespace ODataTestServer.Controllers
             }
         }
 
+        // GET api/groups/<guid>/viewpoint()
+        [ODataRoute("groups({id})/viewpoint()")]
+        [HttpGet]
+        public IHttpActionResult Viewpoint([FromODataUri]string id)
+        {
+            Model.SetupCallerIdentity(null);  // Can't ask for this in appOnly
+
+            Group found = Model.Groups.Where(g => g.Id == id).SingleOrDefault();
+            if (found != null)
+            {
+                return Ok(found.Viewpoints);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
         // GET api/groups/<guid>/viewpoints
         [ODataRoute("groups({id})/viewpoints({vpid})")]
         public IHttpActionResult GetGroupViewpoint([FromODataUri]string id, [FromODataUri]string vpid, string appOnly = null)

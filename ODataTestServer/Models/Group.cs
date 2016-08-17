@@ -51,19 +51,5 @@ namespace ODataTestServer.Models
         {
             this.Id = Guid.NewGuid().ToString();
         }
-
-        /// <summary>
-        /// Facade of the viewpoint for delegate scenarios - null in appOnly scenarios
-        /// </summary>
-        public GroupViewpointFacade Viewpoint
-        {
-            get
-            {
-                return Model.CallerIdentity == null ? null : InternalViewpoints.SingleOrDefault()?.AsFacade();
-            }
-            set
-            {
-            }
-        }
     }
 }
