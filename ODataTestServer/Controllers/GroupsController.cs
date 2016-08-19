@@ -48,7 +48,7 @@ namespace ODataTestServer.Controllers
                 foreach (GroupViewpoint viewpoint in found.Viewpoints)
                 {
                     segments.RemoveAt(segments.Count - 1);
-                    segments.Add(new KeyValuePathSegment($"'{viewpoint.Id}'"));
+                    segments.Add(new KeyValuePathSegment($"'{viewpoint.UserId}'"));
                     string uriString = urlHelper.CreateODataLink(Request.ODataProperties().RouteName, Request.ODataProperties().PathHandler, segments);
                     // Passthru the appOnly flag
                     if (appOnly != null)

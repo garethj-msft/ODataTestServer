@@ -20,7 +20,7 @@ namespace ODataTestServer.Models
     public class GroupViewpoint : GroupViewpointBase
     {
         [Key]
-        public string Id { get; set; }
+        public string UserId { get; set; }
 
         public Group Group { get; set; }
         public User User { get; set; }
@@ -29,7 +29,7 @@ namespace ODataTestServer.Models
         {
             Group = group;
             User = user;
-            Id = user.Id;
+            UserId = user.Id;
         }
 
         internal GroupViewpointFacade AsFacade()
