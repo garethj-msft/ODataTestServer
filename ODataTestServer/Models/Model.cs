@@ -40,9 +40,9 @@ namespace ODataTestServer.Models
             group1.Members.AddRange(new[] { user1, user3 });
             group2.Members.AddRange(new[] { user1, user2 });
             group3.Members.AddRange(new[] { user2, user3 });
-            group1.Viewpoints.AddRange(new[] { viewpoint1_1, viewpoint1_3 });
-            group2.Viewpoints.AddRange(new[] { viewpoint2_1, viewpoint2_2 });
-            group3.Viewpoints.AddRange(new[] { viewpoint3_2, viewpoint3_3 });
+            group1.viewpoints.AddRange(new[] { viewpoint1_1, viewpoint1_3 });
+            group2.viewpoints.AddRange(new[] { viewpoint2_1, viewpoint2_2 });
+            group3.viewpoints.AddRange(new[] { viewpoint3_2, viewpoint3_3 });
 
             groups = new List<Group> { group1, group2, group3 };
             users = new List<User> { user1, user2, user3 };
