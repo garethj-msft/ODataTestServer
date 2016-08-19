@@ -27,6 +27,7 @@ namespace ODataTestServer.Models
         /// <summary>
         /// Internal version of Viewpoints to make debugging easier to separate external calls from internal ones.
         /// </summary>
+        [NotMapped]
         public IEnumerable<GroupViewpoint> InternalViewpoints
         {
             get
